@@ -21,16 +21,16 @@ jobs:
         with:
           latest: true
           extract: true
-      - name: Check filesystem content
+      - name: Update ghcli
         run: |
-          pwd
-          find .
-          ls -al
+          curl -sOL https://github.com/cli/cli/releases/download/v2.49.0/gh_2.49.0_linux_amd64.deb
+          sudo dpkg -i gh_2.49.0_linux_amd64.deb
+          gh version
       - name: Verify attestation for latest release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          RELEASE_FILE=`echo ${{ fromJson(steps.get-latest-release.outputs.downloaded_files)[1] }} | awk -F'/' '{print $NF}'`
+          RELEASE_FILE=`echo ${{ fromJson(steps.get-latest-release.outputs.downloaded_files)[0] }} | awk -F'/' '{print $NF}'`
           echo $RELEASE_FILE
-          echo gh attestation verify ${{ fromJson(steps.get-latest-release.outputs.downloaded_files)[1] }} -o ${{ env.PRODUCT_OWNER }} --bundle attestation.jsonl
-          gh attestation verify ${{ fromJson(steps.get-latest-release.outputs.downloaded_files)[1] }} -o ${{ env.PRODUCT_OWNER }} --bundle attestation.jsonl
+          echo gh attestation verify $RELEASE_FILE -o ${{ env.PRODUCT_OWNER }}
+          gh attestation verify $RELEASE_FILE -o ${{ env.PRODUCT_OWNER }}
