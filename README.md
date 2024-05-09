@@ -2,9 +2,9 @@
 
 This repository contains:
 
-* [main.go](main.go), which is the code for an example program.
+* [main.go](main.go), which is the code for an example program. It's just one source file in this example, but could be more.
 
-* [Dockerfile](Dockerfile), which builds a simple scratch-based image containing a binary.
+* [Dockerfile](Dockerfile), which builds a simple Alpine-based image containing a binary.
 
 * [build-attested-release.yml](.github/workflows/build-attested-release.yml), which is a GitHub workflow that checks out the code, builds cross-platform binaries, creates an archive containing the binaries, creates an attestation for that archive, and then publishes a release.
 
