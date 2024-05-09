@@ -1,20 +1,28 @@
 # stunning-broccoli
 
-This repository contains [main.go](main.go), which is the code for an example program.
+This repository contains:
 
-It also contains [build-attested-release.yml](.github/workflows/build-attested-release.yml), which is a GitHub workflow that checks out the code, builds cross-platform binaries, creates an archive containing the binaries, creates an attestation for that archive, and then publishes a release.
+* [main.go](main.go), which is the code for an example program.
+
+* [Dockerfile](Dockerfile), which builds a simple scratch-based image containing a binary.
+
+* [build-attested-release.yml](.github/workflows/build-attested-release.yml), which is a GitHub workflow that checks out the code, builds cross-platform binaries, creates an archive containing the binaries, creates an attestation for that archive, and then publishes a release.
+
+* [build-attested-image.yml](.github/workflows/build-attested-image.yml), which is a GitHub workflow that downloads the most recent release, verifies the attestation, builds and publishes an image containing that release with appropriate tags, and then creates an attestation for that image.
 
 ## Building a release
 
-The workflow is configured to build when a new tag is pushed, with something like:
+The `build-attested-release` workflow is configured to build when a new tag is pushed, with something like:
 ```
 $ git tag v0.0.1 main -m "release v0.0.1"
 $ git push origin tag v0.0.1
 ```
 
-## Verifying the attestation
+The `build-attested-image` workflow is configured to run when a release is published, and also on demand via dispatch.
 
-The release artifact binary can be downloaded and the the attestation verified using the `gh` client.
+## Verifying the release archive attestation
+
+A stunning-broccoli release archive can be downloaded and the attestation verified using the `gh` client.
 
 For example:
 ```
@@ -30,6 +38,23 @@ finnigja/stunning-broccoli  https://slsa.dev/provenance/v1  .github/workflows/bu
 ```
 
 A JSON-formatted attestation with more detail can be obtained by adding `--format json` to the `gh attestation verify` command.
+
+## Verifying the container image attestation
+
+A stunning-broccoli container image can also be verified using the `gh` client.
+
+For example:
+```
+$ docker login ghcr.io  # if you're not already logged in...
+$ gh attestation verify oci://ghcr.io/finnigja/stunning-broccoli:latest -o finnigja
+Loaded digest sha256:e42064c0a173200ba18aa56f635483611dac08b7900469a846709a3f3144921b for oci://ghcr.io/finnigja/stunning-broccoli:latest
+Loaded 1 attestation from GitHub API
+✓ Verification succeeded!
+
+sha256:e42064c0a173200ba18aa56f635483611dac08b7900469a846709a3f3144921b was attested by:
+REPO                        PREDICATE_TYPE                  WORKFLOW
+finnigja/stunning-broccoli  https://slsa.dev/provenance/v1  .github/workflows/build-attested-image.yml@refs/heads/main
+```
 
 ## About the attestation feature
 
