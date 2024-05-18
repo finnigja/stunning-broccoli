@@ -36,6 +36,6 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: "${{ env.RELEASE_VERSION }}"
-          artifacts: "${{ env.PRODUCT_NAME }}-${{ env.RELEASE_VERSION }}.tar.gz }}"
+          artifacts: "${{ env.PRODUCT_NAME }}-${{ env.RELEASE_VERSION }}.tar.gz"
           body: "${{ env.PRODUCT_NAME }} release ${{ env.RELEASE_VERSION }}"
           makeLatest: true
