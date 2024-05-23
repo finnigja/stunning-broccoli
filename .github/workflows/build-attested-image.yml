@@ -36,12 +36,6 @@ jobs:
         with:
           latest: true
           extract: true
-      - name: Update ghcli
-        run: |
-          # todo: temporary, can remove once ubuntu-latest is updated
-          curl -sOL https://github.com/cli/cli/releases/download/v2.49.0/gh_2.49.0_linux_amd64.deb
-          sudo dpkg -i gh_2.49.0_linux_amd64.deb
-          rm gh_2.49.0_linux_amd64.deb
       - name: Verify attestation for latest release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
