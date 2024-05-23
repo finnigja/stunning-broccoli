@@ -1,7 +1,9 @@
 name: Build an attested image from latest release
 on:
-  release:
-    types: [released]
+  workflow_run:
+    workflows: [Build an attested release on tag push]
+    types:
+      - completed
   workflow_dispatch:
 
 permissions:
