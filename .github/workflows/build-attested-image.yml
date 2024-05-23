@@ -4,6 +4,9 @@ on:
     workflows: [Build an attested release on tag push]
     types:
       - completed
+  schedule:
+    # every Sunday at 4am UTC
+    - cron: "0 4 * * 0"
   workflow_dispatch:
 
 permissions:
